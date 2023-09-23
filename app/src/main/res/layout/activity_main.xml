@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/btnI"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/whatsapp_image_2023_09_12_at_11_49_25_am"
+    tools:context=".MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#5B000000"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp">
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginTop="-100dp"
+            app:srcCompat="@drawable/guessthemovie" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:text="Usuario"
+            android:textColor="#DFDFDF"
+            android:textSize="25dp" />
+
+        <EditText
+            android:id="@+id/tvUsuario"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Ingresa Tu nombre de usuario"
+            android:inputType="text"
+            android:textColor="#DFDFDF"
+            android:textColorHint="#BAB9B9"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:text="Contraseña"
+            android:textColor="#DFDFDF"
+            android:textSize="25dp" />
+
+        <EditText
+            android:id="@+id/tvContra"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Ingrese su contaseña"
+            android:inputType="textPassword"
+            android:textColor="#DFDFDF"
+            android:textColorHint="#BAB9B9"
+            android:text=""/>
+
+        <Button
+            android:id="@+id/btnIniciarSesion"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Inciar sesion"
+            android:textColor="#DFDFDF"
+            android:backgroundTint="#65121211"/>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

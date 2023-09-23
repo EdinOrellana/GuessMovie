@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0C0A29"
+    tools:context=".AdminOpciones">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp"
+        android:gravity="center"
+        android:background="#11FF0008">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-100dp"
+            app:srcCompat="@drawable/adivinanzas" />
+
+        <ImageButton
+            android:id="@+id/btnNueva"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00000000"
+            android:layout_marginTop="200dp"
+            app:srcCompat="@drawable/nueva" />
+
+        <ImageButton
+            android:id="@+id/btneditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00000000"
+            app:srcCompat="@drawable/editar"
+            />
+
+        <ImageButton
+            android:id="@+id/btneliminar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00000000"
+            app:srcCompat="@drawable/eliminar" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UnJugador"
+    android:background="#0C0A29"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ></ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp"
+        >
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/quepelicula" />
+
+        <TextView
+            android:id="@+id/tvTituloPista"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pista 1:"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginTop="100dp"/>
+
+        <TextView
+            android:id="@+id/tvDescripcionPista"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="La cantidad de colores no se que caben en la mayoriaaaaaaaaaaaa"
+            android:textSize="15dp"
+            android:textColor="#CCC1C1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imgPelicula1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                tools:srcCompat="@android:drawable/ic_menu_crop" />
+            <ToggleButton
+                android:id="@+id/toggleButton1"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:backgroundTint="#00000000"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imgPelicula2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                tools:srcCompat="@android:drawable/ic_menu_crop" />
+            <ToggleButton
+                android:id="@+id/toggleButton2"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:backgroundTint="#00000000"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imgPelicula3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                tools:srcCompat="@android:drawable/ic_menu_crop" />
+            <ToggleButton
+                android:id="@+id/toggleButton3"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:backgroundTint="#00000000"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvMensaje"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#F80000"
+            android:paddingTop="50dp"
+            android:paddingBottom="50dp"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <ImageButton
+                android:id="@+id/btnAnterior"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/anterior"
+                android:backgroundTint="#00000000"
+                android:outlineAmbientShadowColor="@color/white"/>
+
+            <Space
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/btnSiguiente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#00000000"
+                app:srcCompat="@drawable/siguiente"
+               />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnConfirmar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00000000"
+            app:srcCompat="@drawable/confirmar"
+            />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
