@@ -45,7 +45,7 @@
             android:inputType="text"
             android:textColor="#DFDFDF"
             android:textColorHint="#BAB9B9"
-            android:text=""/>
+            android:text="Edin"/>
 
         <TextView
             android:id="@+id/textView2"
@@ -65,7 +65,7 @@
             android:inputType="textPassword"
             android:textColor="#DFDFDF"
             android:textColorHint="#BAB9B9"
-            android:text=""/>
+            android:text="Edin"/>
 
         <Button
             android:id="@+id/btnIniciarSesion"
@@ -75,6 +75,40 @@
             android:text="Inciar sesion"
             android:textColor="#DFDFDF"
             android:backgroundTint="#65121211"/>
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp">
+            <View
+                android:layout_width="150dp"
+                android:layout_height="2dp"
+                android:background="@color/white" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="Otro"
+                android:textColor="@color/white"/>
+
+            <View
+                android:layout_width="150dp"
+                android:layout_height="2dp"
+                android:background="@color/white" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btngogle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/google_logo"
+            android:layout_marginTop="20dp"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

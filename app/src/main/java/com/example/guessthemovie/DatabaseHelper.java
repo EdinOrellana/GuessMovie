@@ -8,15 +8,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "GuessTheMovie.db";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "GuessTheMovie4.db";
     public static final String TABLE_LOGIN = "Login";
     public static final String COLUMNLOGIN_ID = "idUsuarioc";
     public static final String COLUMNLOGIN_NAME = "Nombre";
     public static final String COLUMNLOGIN_PASSWORD="Password";
     public static final String TABLE_ADIVINANZA = "Adivinanza";
     public static final String COLUMNADIVINANZA_ID="IdAdivinanza";
-
     public static final String COLUMNADIVINANZA_PELICULA="Pelicula";
     public static final String COLUMNADIVINANZA_IMAGEN="Imagen";
 
@@ -29,7 +28,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMNADIVINANZA_IMAGEN1="Imagen1";
     public static final String COLUMNADIVINANZA_IMAGEN2="Imagen2";
-    public static final String COLUMNADIVINANZA_NUBE="Nube";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,6 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         try {
             String query = "CREATE TABLE " + TABLE_LOGIN + " (" +
                     COLUMNLOGIN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -55,7 +54,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMNADIVINANZA_RESPUESTA1 + " TEXT, "+
                     COLUMNADIVINANZA_RESPUESTA2 + " TEXT, "+
                     COLUMNADIVINANZA_IMAGEN1 + " TEXT, "+
-                    COLUMNADIVINANZA_NUBE + " INTEGER, "+
                     COLUMNADIVINANZA_IMAGEN2 + " TEXT);";
             db.execSQL(query3);
         }catch (Exception e){

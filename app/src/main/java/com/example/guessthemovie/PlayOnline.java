@@ -1,14 +1,11 @@
 package com.example.guessthemovie;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -18,30 +15,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class UnJugador extends AppCompatActivity {
-    private DatabaseHelper databaseHelper;
-    private SQLiteDatabase database;
+public class PlayOnline extends AppCompatActivity {
+    private final ArrayList<Peliculas> ArryPeliculas = new ArrayList<>();
+
     private TextView TituloPista, DescripcionPista, Mensaje;
     private ImageView imgPelicula1, imgPelicula2, imgPelicula3;
     private ToggleButton toggleButton1, toggleButton2, toggleButton3;
     private final ArrayList<String> Pistas = new ArrayList<>(3);
     private ImageButton btnConfirmar, btnSiguiente, btnAnterior;
     private String pelicula1, seleccion1;
-    private final ArrayList<String> id = new ArrayList<>();
     private int aleatorioAnterior = -1;
-    private int n1, ContadorPista = 0;
+    private int ContadorPista = 0;
+
+    private String NombreUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_un_jugador);
-
-        databaseHelper = new DatabaseHelper(this);
+        setContentView(R.layout.activity_play_online);
         TituloPista = findViewById(R.id.tvTituloPista);
         DescripcionPista = findViewById(R.id.tvDescripcionPista);
+
         Mensaje = findViewById(R.id.tvMensaje);
         toggleButton1 = findViewById(R.id.toggleButton1);
         toggleButton2 = findViewById(R.id.toggleButton2);
@@ -50,8 +52,14 @@ public class UnJugador extends AppCompatActivity {
         imgPelicula1 = findViewById(R.id.imgPelicula1);
         imgPelicula2 = findViewById(R.id.imgPelicula2);
         imgPelicula3 = findViewById(R.id.imgPelicula3);
-
         btnSiguiente = findViewById(R.id.btnSiguiente);
+        btnAnterior = findViewById(R.id.btnAnterior);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            NombreUsuario = bundle.getString("Message_key");
+        }
+
         btnSiguiente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +73,7 @@ public class UnJugador extends AppCompatActivity {
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alerta = new AlertDialog.Builder(UnJugador.this);
+                AlertDialog.Builder alerta = new AlertDialog.Builder(PlayOnline.this);
                 alerta.setMessage("¿Deseas seguir jugando?").setCancelable(false).setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -82,7 +90,7 @@ public class UnJugador extends AppCompatActivity {
                 titulo.setTitle("Single player");
                 titulo.show();
 
-                AlertDialog.Builder alerta2 = new AlertDialog.Builder(UnJugador.this);
+                AlertDialog.Builder alerta2 = new AlertDialog.Builder(PlayOnline.this);
                 alerta2.setMessage("").setCancelable(false).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -92,17 +100,15 @@ public class UnJugador extends AppCompatActivity {
                     AlertDialog titulo2 = alerta2.create();
                     titulo2.setTitle("Adivinaste");
                     titulo2.show();
-                    Toast.makeText(UnJugador.this, "Adivinaste", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlayOnline.this, "Adivinaste", Toast.LENGTH_SHORT).show();
                 } else {
                     AlertDialog titulo2 = alerta2.create();
                     titulo2.setTitle("Fallaste");
                     titulo2.show();
-                    Toast.makeText(UnJugador.this, "Fallaste intena de nuevo", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlayOnline.this, "Fallaste intena de nuevo", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-        btnAnterior = findViewById(R.id.btnAnterior);
         btnAnterior.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,116 +146,80 @@ public class UnJugador extends AppCompatActivity {
         toggleButton1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    toggleButton1.setBackgroundColor(ContextCompat.getColor(getBaseContext(),R.color.sincolor));
-                }else{
-                    toggleButton1.setBackgroundColor(ContextCompat.getColor(getBaseContext(),R.color.morado));
+                if (isChecked) {
+                    toggleButton1.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.sincolor));
+                } else {
+                    toggleButton1.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.morado));
                 }
             }
         });
         toggleButton2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    toggleButton2.setBackgroundColor(ContextCompat.getColor(getBaseContext(),R.color.sincolor));
-                }else{
-                    toggleButton2.setBackgroundColor(ContextCompat.getColor(getBaseContext(),R.color.morado));
+                if (isChecked) {
+                    toggleButton2.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.sincolor));
+                } else {
+                    toggleButton2.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.morado));
                 }
             }
         });
         toggleButton3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    toggleButton3.setBackgroundColor(ContextCompat.getColor(getBaseContext(),R.color.sincolor));
-                }else{
-                    toggleButton3.setBackgroundColor(ContextCompat.getColor(getBaseContext(),R.color.morado));
+                if (isChecked) {
+                    toggleButton3.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.sincolor));
+                } else {
+                    toggleButton3.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.morado));
                 }
             }
         });
-        NuevoJuego();
 
+        NuevoJuego();
 
     }
 
     void NuevoJuego() {
+        ArryPeliculas.clear();
         Pistas.clear();
         pelicula1 = "";
         seleccion1 = "";
-        id.clear();
         ContadorPista = 0;
         CargarDatos();
-        toggleButton1.setChecked(true);
-        toggleButton2.setChecked(true);
-        toggleButton3.setChecked(true);
     }
 
-    void CargarDatos() {
-        database = databaseHelper.getWritableDatabase();
-        String[] columnas1 = {DatabaseHelper.COLUMNADIVINANZA_ID};
-        try {
-            Cursor cursor = database.query(DatabaseHelper.TABLE_ADIVINANZA, columnas1, null, null, null, null, null);
-            cursor.moveToFirst();
-            if (cursor.moveToFirst()) {
-                n1 = cursor.getCount();
-                do {
-                    id.add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMNADIVINANZA_ID)));
-                } while (cursor.moveToNext());
+    private void CargarDatos() {
+
+        DAOMultijugador dao = new DAOMultijugador();
+        dao.get().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    Peliculas peli = data.getValue(Peliculas.class);
+                    ArryPeliculas.add(peli);
+                }
+                int No = numeroaleatoreo();
+
+                ordenarRespuestas(ArryPeliculas.get(No).getImagen1(), ArryPeliculas.get(No).getImagen2(), ArryPeliculas.get(No).getImagen3(), ArryPeliculas.get(No).getPelicula(), ArryPeliculas.get(No).getRespuesta1(), ArryPeliculas.get(No).getRespuesta2());
+
+                pelicula1 = ArryPeliculas.get(No).getPelicula();
+                Pistas.add(ArryPeliculas.get(No).getPista1());
+                Pistas.add(ArryPeliculas.get(No).getPista2());
+                Pistas.add(ArryPeliculas.get(No).getPista3());
+
+                TituloPista.setText("Pista 1");
+                DescripcionPista.setText(Pistas.get(0));
             }
-            cursor.close();
-            database.close();
-            datos();
-        } catch (Exception e) {
-            Toast.makeText(UnJugador.this, "Error al cargar datos", Toast.LENGTH_SHORT).show();
-        }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
-    void datos() {
-        database = databaseHelper.getWritableDatabase();
-        String[] columnas = {
-                DatabaseHelper.COLUMNADIVINANZA_PELICULA,
-                DatabaseHelper.COLUMNADIVINANZA_IMAGEN,
-                DatabaseHelper.COLUMNADIVINANZA_PISTA1,
-                DatabaseHelper.COLUMNADIVINANZA_PISTA2,
-                DatabaseHelper.COLUMNADIVINANZA_PISTA3,
-                DatabaseHelper.COLUMNADIVINANZA_RESPUESTA1,
-                DatabaseHelper.COLUMNADIVINANZA_RESPUESTA2,
-                DatabaseHelper.COLUMNADIVINANZA_IMAGEN1,
-                DatabaseHelper.COLUMNADIVINANZA_IMAGEN2};
-        try {
-            String[] parametros = {id.get(numeroaleatoreo(n1 - 1))};
-            Cursor cursor = database.query(DatabaseHelper.TABLE_ADIVINANZA, columnas, DatabaseHelper.COLUMNADIVINANZA_ID + "=?", parametros, null, null, null);
-            cursor.moveToFirst();
-
-            String imagen1 = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMNADIVINANZA_IMAGEN));
-            String imagen2 = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMNADIVINANZA_IMAGEN1));
-            String imagen3 = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMNADIVINANZA_IMAGEN2));
-
-            Uri uri1 = Uri.parse(imagen1);
-            Uri uri2 = Uri.parse(imagen2);
-            Uri uri3 = Uri.parse(imagen3);
-
-            pelicula1 = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMNADIVINANZA_PELICULA));
-            String pelicula2 = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMNADIVINANZA_RESPUESTA1));
-            String pelicula3 = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMNADIVINANZA_RESPUESTA2));
-
-            Pistas.add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMNADIVINANZA_PISTA1)));
-            Pistas.add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMNADIVINANZA_PISTA2)));
-            Pistas.add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMNADIVINANZA_PISTA3)));
-            ordenarRespuestas(uri1, uri2, uri3, pelicula1, pelicula2, pelicula3);
-
-            cursor.close();
-            database.close();
-            pista1(ContadorPista);
-        } catch (Exception e) {
-            Toast.makeText(UnJugador.this, "" + e, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    int numeroaleatoreo(int numero) {
+    int numeroaleatoreo() {
         int aleatorio, salir = -2;
         do {
-            aleatorio = ThreadLocalRandom.current().nextInt(0, numero + 1);
+            aleatorio = ThreadLocalRandom.current().nextInt(0, (ArryPeliculas.size() - 1) + 1);
             if (aleatorio != aleatorioAnterior) {
                 salir = aleatorioAnterior;
             }
@@ -258,14 +228,14 @@ public class UnJugador extends AppCompatActivity {
         return aleatorio;
     }
 
-    void ordenarRespuestas(Uri uri1, Uri uri2, Uri uri3, String pelicula1, String pelicula2, String pelicula3) {
+    void ordenarRespuestas(String img1, String img2, String img3, String pelicula1, String pelicula2, String pelicula3) {
         int orden = ThreadLocalRandom.current().nextInt(0, 5 + 1);
         switch (orden) {
 
             case 0:
-                imgPelicula1.setImageURI(uri1);
-                imgPelicula2.setImageURI(uri2);
-                imgPelicula3.setImageURI(uri3);
+                Glide.with(PlayOnline.this).load(img1).into(imgPelicula1);
+                Glide.with(PlayOnline.this).load(img2).into(imgPelicula2);
+                Glide.with(PlayOnline.this).load(img3).into(imgPelicula3);
 
                 toggleButton1.setTextOn(pelicula1);
                 toggleButton2.setTextOn(pelicula2);
@@ -275,9 +245,10 @@ public class UnJugador extends AppCompatActivity {
                 toggleButton3.setTextOff(pelicula3);
                 break;
             case 1:
-                imgPelicula1.setImageURI(uri1);
-                imgPelicula2.setImageURI(uri3);
-                imgPelicula3.setImageURI(uri2);
+
+                Glide.with(PlayOnline.this).load(img1).into(imgPelicula1);
+                Glide.with(PlayOnline.this).load(img3).into(imgPelicula2);
+                Glide.with(PlayOnline.this).load(img2).into(imgPelicula3);
 
                 toggleButton1.setTextOn(pelicula1);
                 toggleButton2.setTextOn(pelicula3);
@@ -287,9 +258,9 @@ public class UnJugador extends AppCompatActivity {
                 toggleButton3.setTextOff(pelicula2);
                 break;
             case 2:
-                imgPelicula1.setImageURI(uri2);
-                imgPelicula2.setImageURI(uri1);
-                imgPelicula3.setImageURI(uri3);
+                Glide.with(PlayOnline.this).load(img2).into(imgPelicula1);
+                Glide.with(PlayOnline.this).load(img1).into(imgPelicula2);
+                Glide.with(PlayOnline.this).load(img3).into(imgPelicula3);
 
                 toggleButton1.setTextOn(pelicula2);
                 toggleButton2.setTextOn(pelicula1);
@@ -299,9 +270,9 @@ public class UnJugador extends AppCompatActivity {
                 toggleButton3.setTextOff(pelicula3);
                 break;
             case 3:
-                imgPelicula1.setImageURI(uri2);
-                imgPelicula2.setImageURI(uri3);
-                imgPelicula3.setImageURI(uri1);
+                Glide.with(PlayOnline.this).load(img2).into(imgPelicula1);
+                Glide.with(PlayOnline.this).load(img3).into(imgPelicula2);
+                Glide.with(PlayOnline.this).load(img1).into(imgPelicula3);
 
                 toggleButton1.setTextOn(pelicula2);
                 toggleButton2.setTextOn(pelicula3);
@@ -311,9 +282,9 @@ public class UnJugador extends AppCompatActivity {
                 toggleButton3.setTextOff(pelicula1);
                 break;
             case 4:
-                imgPelicula1.setImageURI(uri3);
-                imgPelicula2.setImageURI(uri1);
-                imgPelicula3.setImageURI(uri2);
+                Glide.with(PlayOnline.this).load(img3).into(imgPelicula1);
+                Glide.with(PlayOnline.this).load(img1).into(imgPelicula2);
+                Glide.with(PlayOnline.this).load(img2).into(imgPelicula3);
 
                 toggleButton1.setTextOn(pelicula3);
                 toggleButton2.setTextOn(pelicula1);
@@ -323,9 +294,9 @@ public class UnJugador extends AppCompatActivity {
                 toggleButton3.setTextOff(pelicula2);
                 break;
             case 5:
-                imgPelicula1.setImageURI(uri3);
-                imgPelicula2.setImageURI(uri2);
-                imgPelicula3.setImageURI(uri1);
+                Glide.with(PlayOnline.this).load(img3).into(imgPelicula1);
+                Glide.with(PlayOnline.this).load(img2).into(imgPelicula2);
+                Glide.with(PlayOnline.this).load(img1).into(imgPelicula3);
 
                 toggleButton1.setTextOn(pelicula3);
                 toggleButton2.setTextOn(pelicula2);
@@ -335,11 +306,12 @@ public class UnJugador extends AppCompatActivity {
                 toggleButton3.setTextOff(pelicula1);
                 break;
         }
-
+        toggleButton1.setChecked(true);
+        toggleButton2.setChecked(true);
+        toggleButton3.setChecked(true);
     }
 
     void pista1(int n1) {
-
         switch (n1) {
             case 0:
                 TituloPista.setText("Pista 1");
@@ -355,4 +327,5 @@ public class UnJugador extends AppCompatActivity {
                 break;
         }
     }
+
 }
